@@ -1,7 +1,7 @@
-local mod_id = "j_malsmod_malloc"
+local mod_id = "j_mals_mod_mal_loc"
 local mod_name = "Mals Mod"
 local mod_version = "1.0"
-local mod_author = "malloc"
+local mod_author = "mal_loc"
 local mod_description = "Adds a counting joker"
 
 local ranks = {"NaN",'2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'}
