@@ -7,7 +7,7 @@
 This mod adds the Counting Joker.
 
 
-# How do I install the new file?
+# How do I install the mod?
 
 
 ## Balamod
