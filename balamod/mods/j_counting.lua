@@ -1,6 +1,4 @@
-local mals_mod_config = require "Mods.malsmod"
-
-
+local j_counting = {}
 --TESTING
 local ranks = {"NaN",'2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'}
 
@@ -49,16 +47,7 @@ local function jokerEffect(card, context)
     end
 end
 
-sendDebugMessage(mals_mod_config);
-table.insert(mods,
-{
-    mod_id = mals_mod_config.mod_id,
-    name = mals_mod_config.mod_name,
-    version = mals_mod_config.mod_version,
-    description = mals_mod_config.mod_description,
-    author = mals_mod_config.mod_author,
-    enabled = true,
-    on_enable = function()
+j_counting.onEnable = function()
         centerHook.addJoker(self, 
             joker_id,  --id
             joker_name,       --name
@@ -83,8 +72,9 @@ table.insert(mods,
             {px=71, py=95}      --sprite size
         )
        inject(effect_description_target_file, effect_description_target_function, original_code, ability_text)
-    end,
-    on_disable = function()
+end
+j_counting.on_disable = function()
         centerHook.removeJoker(self, joker_id)
-    end
-})
+end
+
+return j_counting
