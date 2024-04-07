@@ -1,8 +1,4 @@
-local mod_id = "j_mals_mod_mal_loc"
-local mod_name = "Mals Mod"
-local mod_version = "1.0"
-local mod_author = "mal_loc"
-local mod_description = "Adds a counting joker"
+local mals_mod_config = require "Mods.malsmod"
 
 local ranks = {"NaN",'2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'}
 
@@ -50,13 +46,15 @@ local function jokerEffect(card, context)
         end 
     end
 end
+
+sendDebugMessage(mals_mod_config);
 table.insert(mods,
 {
-    mod_id = mod_id,
-    name = mod_name,
-    version = mod_version,
-    description = mod_description,
-    author = mod_author,
+    mod_id = mals_mod_config.mod_id,
+    name = mals_mod_config.mod_name,
+    version = mals_mod_config.mod_version,
+    description = mals_mod_config.mod_description,
+    author = mals_mod_config.mod_author,
     enabled = true,
     on_enable = function()
         centerHook.addJoker(self, 
