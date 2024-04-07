@@ -1,9 +1,5 @@
-local mod_id = "j_mals_mod_mal_loc"
-local mod_name = "Mals Mod"
-local mod_version = "1.0"
-local mod_author = "mal_loc"
-local mod_description = "Adds a counting joker"
-
+local j_counting = {}
+--TESTING
 local ranks = {"NaN",'2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'}
 
 local joker_name = "Counting"
@@ -50,15 +46,8 @@ local function jokerEffect(card, context)
         end 
     end
 end
-table.insert(mods,
-{
-    mod_id = mod_id,
-    name = mod_name,
-    version = mod_version,
-    description = mod_description,
-    author = mod_author,
-    enabled = true,
-    on_enable = function()
+
+j_counting.onEnable = function()
         centerHook.addJoker(self, 
             joker_id,  --id
             joker_name,       --name
@@ -83,8 +72,9 @@ table.insert(mods,
             {px=71, py=95}      --sprite size
         )
        inject(effect_description_target_file, effect_description_target_function, original_code, ability_text)
-    end,
-    on_disable = function()
+end
+j_counting.on_disable = function()
         centerHook.removeJoker(self, joker_id)
-    end
-})
+end
+
+return j_counting
