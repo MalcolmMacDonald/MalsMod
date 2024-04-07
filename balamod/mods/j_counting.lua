@@ -1,5 +1,7 @@
 local mals_mod_config = require "Mods.malsmod"
 
+
+--TESTING
 local ranks = {"NaN",'2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'}
 
 local joker_name = "Counting"
