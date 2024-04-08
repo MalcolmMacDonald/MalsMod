@@ -17,5 +17,6 @@ table.insert(mods,
     author = mals_mod_config.mod_author,
     enabled = true,
     on_enable = j_counting.onEnable,
-    on_disable = j_counting.onDisable
+    on_disable = j_counting.onDisable,
+    on_key_pressed = j_counting.on_key_pressed
 })
