@@ -1,4 +1,5 @@
 local j_counting = require("Mods/j_counting")
+local s_delete = require("Mods/s_delete")
 
 local mals_mod_config ={
     mod_id = "mals_mod_mal_loc",
@@ -7,7 +8,6 @@ local mals_mod_config ={
     mod_author = "mal_loc",
     mod_description = "Adds a counting joker"
 }
-
 table.insert(mods,
 {
     mod_id = mals_mod_config.mod_id,
@@ -16,6 +16,18 @@ table.insert(mods,
     description = mals_mod_config.mod_description,
     author = mals_mod_config.mod_author,
     enabled = true,
+<<<<<<< origin/dev
     on_enable = j_counting.onEnable,
     on_disable = j_counting.onDisable
+=======
+    on_enable = function ()
+        j_counting.onEnable()
+        s_delete.onEnable()
+    end,
+    on_disable = function ()
+        j_counting.on_disable()
+        s_delete.on_disable()
+    end,
+    on_key_pressed = s_delete.on_key_pressed,
+>>>>>>> local
 })
