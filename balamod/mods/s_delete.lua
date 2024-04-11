@@ -5,8 +5,20 @@ local spectral_id = "s_delete_mal_loc"
 local pool_injection_target_file = "functions/common_events.lua"
 local pool_injection_target_function = "get_current_pool"
 local pool_injection_target = "        return _pool, _pool_key..G.GAME.round_resets.ante"
-local pool_injection_replace = "    sendDebugMessage(_pool_key)\n" .. pool_injection_target
+local pool_injection_replace = "    sendDebugMessage(_pool)\n" .. pool_injection_target
 
+
+[[--
+
+At the moment, Showman doesnt undo the banned card. 
+
+Jokers: working
+Consumeables: working
+Vouchers: untested
+Boosters: not working yet
+Playing cards: not working
+
+--]]
 
 
 local function appendTable(a, b)
@@ -79,7 +91,12 @@ local function consumeableEffect(card)
     if card.ability.name == spectral_name then
 
         local highlighted_card = getAllHighlightedCards(card)[1]
-        sendDebugMessage(highlighted_card)
+        sendDebugMessage(highlighted_card.config.center)
+        if G.GAME.banned_keys == nil then
+            G.GAME.banned_keys = {}
+        end
+        G.GAME.banned_keys[highlighted_card.config.center.key] = true
+        sendDebugMessage(G.GAME.banned_keys)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.2,
@@ -90,7 +107,7 @@ local function consumeableEffect(card)
                 else
                     highlighted_card:start_dissolve(nil,false)
                 end
-                G.GAME.banned_keys[highlighted_card.key] = true
+               -- G.GAME.banned_keys[highlighted_card.id] = true
                 return true 
             end 
             })

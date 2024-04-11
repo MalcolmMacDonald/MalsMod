@@ -16,10 +16,6 @@ table.insert(mods,
     description = mals_mod_config.mod_description,
     author = mals_mod_config.mod_author,
     enabled = true,
-<<<<<<< origin/dev
-    on_enable = j_counting.onEnable,
-    on_disable = j_counting.onDisable
-=======
     on_enable = function ()
         j_counting.onEnable()
         s_delete.onEnable()
@@ -29,5 +25,4 @@ table.insert(mods,
         s_delete.on_disable()
     end,
     on_key_pressed = s_delete.on_key_pressed,
->>>>>>> local
 })
