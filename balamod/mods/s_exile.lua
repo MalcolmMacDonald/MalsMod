@@ -1,25 +1,22 @@
-local s_delete = {}
-local spectral_name = "Delete"
-local spectral_id = "s_delete_mal_loc"
+local s_exile = {}
+local spectral_name = "Exile"
+local spectral_id = "s_exile_mal_loc"
 
 local pool_injection_target_file = "functions/common_events.lua"
 local pool_injection_target_function = "get_current_pool"
-local pool_injection_target = "        return _pool, _pool_key..G.GAME.round_resets.ante"
-local pool_injection_replace = "    sendDebugMessage(_pool)\n" .. pool_injection_target
+--local pool_injection_target = "        return _pool, _pool_key..G.GAME.round_resets.ante"
+--local pool_injection_replace = "    sendDebugMessage(_pool)\n" .. pool_injection_target
 
 
-[[--
 
-At the moment, Showman doesnt undo the banned card. 
 
+--[[ At the moment, Showman doesnt undo the banned card. 
+Verify that destroyed card triggers jokers that rely on destroyed cards.
 Jokers: working
 Consumeables: working
 Vouchers: untested
 Boosters: not working yet
-Playing cards: not working
-
---]]
-
+Playing cards: not working ]]
 
 local function appendTable(a, b)
     for i,v in ipairs(b) do
@@ -117,7 +114,7 @@ end
 
 
 
-s_delete.onEnable = function()
+s_exile.onEnable = function()
     local spectral, text = centerHook.addSpectral(self,
     spectral_id,
     spectral_name,
@@ -134,17 +131,17 @@ s_delete.onEnable = function()
     "bezos spectral.png"
 )
 sendDebugMessage(pool_injection_replace)
-inject(pool_injection_target_file, pool_injection_target_function,pool_injection_target, pool_injection_replace)
+--inject(pool_injection_target_file, pool_injection_target_function,pool_injection_target, pool_injection_replace)
 
 end
-s_delete.on_disable = function()
+s_exile.on_disable = function()
     centerHook.removeSpectral(self, spectral_id)
 end
 
 
 
 
-s_delete.on_key_pressed = function(key)
+s_exile.on_key_pressed = function(key)
   if(key == 'v') then
         local c_set = "Spectral" -- "Spectral", "Planet", etc
         local c1 = create_card(c_set, G.consumeables, nil, 1, false, false, spectral_id, nil)
@@ -168,6 +165,6 @@ s_delete.on_key_pressed = function(key)
     end
 end
 
-return s_delete;
+return s_exile;
 
 

@@ -1,7 +1,7 @@
-local j_counting = {}
+local j_countdown = {}
 local ranks = {"NaN",'2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'}
-local joker_name = "Counting"
-local joker_id = "j_counting_malloc"
+local joker_name = "Countdown"
+local joker_id = "j_countdown_malloc"
 local joker_description = {
     "Gains {X:mult,C:white} X#1# {} Mult when a {C:attention}#2#{} is scored,",
     "rank decreases when activated",
@@ -10,7 +10,7 @@ local joker_description = {
 local effect_description_target_file = "card.lua"
 local effect_description_target_function = "Card:generate_UIBox_ability_table"
 local original_code = "        elseif self.ability.name == 'Perkeo' then loc_vars = {self.ability.extra}"
-local ability_text = original_code .. "\n        elseif self.ability.name == 'Counting' then loc_vars = {self.ability.extra.x_mult_delta, localize(self.ability.extra.rank_name,'ranks'), self.ability.x_mult }"
+local ability_text = original_code .. "\n        elseif self.ability.name == 'Countdown' then loc_vars = {self.ability.extra.x_mult_delta, localize(self.ability.extra.rank_name,'ranks'), self.ability.x_mult }"
 
 local function jokerEffect(card, context)
     if card.ability.name == joker_name and context.individual and context.cardarea == G.play then 
@@ -49,7 +49,7 @@ local function jokerEffect(card, context)
     end
 end
 
-j_counting.onEnable = function()
+j_countdown.onEnable = function()
         centerHook.addJoker(self, 
             joker_id,  --id
             joker_name,       --name
@@ -70,16 +70,16 @@ j_counting.onEnable = function()
             nil,                --unlock condition
             true,               --collection alert
             "assets",           --sprite path
-            "Counting.png",   --sprite name
+            "Countdown.png",   --sprite name
             {px=71, py=95}      --sprite size
         )
        inject(effect_description_target_file, effect_description_target_function, original_code, ability_text)
 end
-j_counting.on_disable = function()
+j_countdown.on_disable = function()
         centerHook.removeJoker(self, joker_id)
 end
 
-j_counting.on_key_pressed = function(key_name)
+j_countdown.on_key_pressed = function(key_name)
     --[[if (key_name == "down" or key_name == "up") then
         if (G.jokers == nil) then return end
         if (G.jokers.highlighted == nil) then return end
@@ -101,4 +101,4 @@ j_counting.on_key_pressed = function(key_name)
    end]]
 end
 
-return j_counting
+return j_countdown
