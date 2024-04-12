@@ -10,13 +10,18 @@ local pool_injection_target_function = "get_current_pool"
 
 
 
---[[ At the moment, Showman doesnt undo the banned card. 
+--[[
+At the moment, Showman doesnt undo the banned card.
 Verify that destroyed card triggers jokers that rely on destroyed cards.
 Jokers: working
 Consumeables: working
-Vouchers: untested
-Boosters: not working yet
-Playing cards: not working ]]
+
+
+
+Vouchers: not in scope
+Playing cards: not working 
+Boosters: not in scope
+]]
 
 local function appendTable(a, b)
     for i,v in ipairs(b) do
@@ -42,11 +47,11 @@ local function getAllHighlightedCards(this_card)
     local result = {}
     result = appendTable(result, getAreaHighlightedCards(G.jokers))
     result = appendTable(result, getAreaHighlightedCards(G.hand))
-    result =  appendTable(result, getAreaHighlightedCards(G.consumeables))
-    result = appendTable(result,  getAreaHighlightedCards(G.shop_jokers))
-    result = appendTable(result,  getAreaHighlightedCards(G.shop_vouchers))
-    result = appendTable(result,  getAreaHighlightedCards(G.shop_booster))
-    result = appendTable(result,  getAreaHighlightedCards(G.pack_cards))
+    result = appendTable(result, getAreaHighlightedCards(G.consumeables))
+    result = appendTable(result, getAreaHighlightedCards(G.shop_jokers))
+    --result = appendTable(result, getAreaHighlightedCards(G.shop_vouchers))
+    --result = appendTable(result, getAreaHighlightedCards(G.shop_booster))
+    result = appendTable(result, getAreaHighlightedCards(G.pack_cards))
     
     if this_card then
         for i, card in ipairs(result) do

@@ -12,25 +12,32 @@ local effect_description_target_function = "Card:generate_UIBox_ability_table"
 local original_code = "        elseif self.ability.name == 'Perkeo' then loc_vars = {self.ability.extra}"
 local ability_text = original_code .. "\n        elseif self.ability.name == 'Countdown' then loc_vars = {self.ability.extra.x_mult_delta, localize(self.ability.extra.rank_name,'ranks'), self.ability.x_mult }"
 
+
+local function changeRankIndex(card,direction) 
+    card.ability.extra.rank_index = card.ability.extra.rank_index + direction
+    local has_looped = false
+    if card.ability.extra.rank_index == 1 then
+        card.ability.extra.rank_index = 14
+        has_looped = true
+    end
+    card.ability.extra.rank_name = ranks[card.ability.extra.rank_index]
+    card.ability.x_mult = card.ability.x_mult + card.ability.extra.x_mult_delta
+    return has_looped
+end
+
 local function jokerEffect(card, context)
     if card.ability.name == joker_name and context.individual and context.cardarea == G.play then 
         local v = context.other_card
         local cardVal = v:get_id()
         if cardVal == card.ability.extra.rank_index then
-            card.ability.extra.rank_index = card.ability.extra.rank_index - 1
-            local will_gong = false
-            if card.ability.extra.rank_index == 1 then
-                card.ability.extra.rank_index = 14
-                will_gong = true
-            end
-            card.ability.extra.rank_name = ranks[card.ability.extra.rank_index]
-            card.ability.x_mult = card.ability.x_mult + card.ability.extra.x_mult_delta
-            if will_gong then
+            changeRankIndex(card, -1)
+            local has_looped = card.ability.extra.rank_index == 13
+            if has_looped then 
                 G.E_MANAGER:add_event(Event({
-                    blocking=true,
-                    delay =  0.12*G.SETTINGS.GAMESPEED,
+                    blocking=false,
                     func = function()
                         play_sound('gong', 0.8, 0.7)
+                        card:juice_up(0.7)
                         return true
                     end
                 }))
@@ -52,7 +59,7 @@ end
 j_countdown.onEnable = function()
         centerHook.addJoker(self, 
             joker_id,  --id
-            joker_name,       --name
+            joker_name,         --name
             jokerEffect,        --effect function
             nil,                --order
             true,               --unlocked
