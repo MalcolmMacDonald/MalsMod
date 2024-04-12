@@ -125,10 +125,11 @@ s_exile.onEnable = function()
     4,
     {x=0,y=0},
     nil,
-    {"Gain $100"},
+    {"Remove {C:attention}1{} selected card",
+    "from the game"},
     true,
     "assets",
-    "bezos spectral.png"
+    "Exile.png"
 )
 sendDebugMessage(pool_injection_replace)
 --inject(pool_injection_target_file, pool_injection_target_function,pool_injection_target, pool_injection_replace)
