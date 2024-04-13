@@ -8,18 +8,30 @@ local pool_injection_target_function = "get_current_pool"
 --local pool_injection_replace = "    sendDebugMessage(_pool)\n" .. pool_injection_target
 
 
+local available_cards_target_file = "game.lua"
+local available_cards_target_function = "Game:init_game_object"
+local available_cards_target = "        banned_keys = {},"
+local available_cards_replace = available_cards_target .. "\n current_playing_cards = G.P_CARDS,"
+
+
+local get_available_cards_target_file = "functions/common_events.lua"
+local get_available_cards_target_function = "create_playing_card"
+local get_available_cards_target = "    card_init.front = card_init.front or pseudorandom_element(G.P_CARDS, pseudoseed('front'))"
+local get_available_cards_replace = "    card_init.front = card_init.front or pseudorandom_element(G.GAME.current_playing_cards, pseudoseed('front'))"
 
 
 --[[
 At the moment, Showman doesnt undo the banned card.
-Verify that destroyed card triggers jokers that rely on destroyed cards.
+Verify that destroyed card triggers jokers that rely on destroyed cards
+   Canio: working
+   Glass Joker: not working (matches behaviour in base game)
 Jokers: working
 Consumeables: working
+Playing cards: working
 
 
 
 Vouchers: not in scope
-Playing cards: not working 
 Boosters: not in scope
 ]]
 
@@ -88,28 +100,45 @@ end
     end
 ]]
 
+
+local function exileCard(card)
+    local card_key = card.config.card_key
+
+    if card_key ~= nil then
+        sendDebugMessage("Exiling card: " .. card_key)
+        G.GAME.current_playing_cards[card_key] = nil
+        for i = 1, #G.jokers.cards do
+            G.jokers.cards[i]:calculate_joker({remove_playing_cards = true, removed = {card}})
+        end
+    else 
+        if G.GAME.banned_keys == nil then
+            G.GAME.banned_keys = {}
+        end
+        G.GAME.banned_keys[card.config.center.key] = true
+    end
+end 
+
 --look for Showman
 local function consumeableEffect(card)
     if card.ability.name == spectral_name then
 
         local highlighted_card = getAllHighlightedCards(card)[1]
+
         sendDebugMessage(highlighted_card.config.center)
-        if G.GAME.banned_keys == nil then
-            G.GAME.banned_keys = {}
-        end
-        G.GAME.banned_keys[highlighted_card.config.center.key] = true
-        sendDebugMessage(G.GAME.banned_keys)
+
+
+        --sendDebugMessage(G.GAME.banned_keys)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.2,
             func = function() 
                 play_sound('timpani')
+                exileCard(highlighted_card)
                 if highlighted_card.abiilty and highlighted_card.abiilty.name == 'Glass Card' then
                     highlighted_card:shatter()
                 else
                     highlighted_card:start_dissolve(nil,false)
                 end
-               -- G.GAME.banned_keys[highlighted_card.id] = true
                 return true 
             end 
             })
@@ -136,9 +165,10 @@ s_exile.onEnable = function()
     "assets",
     "Exile.png"
 )
-sendDebugMessage(pool_injection_replace)
+--sendDebugMessage(pool_injection_replace)
 --inject(pool_injection_target_file, pool_injection_target_function,pool_injection_target, pool_injection_replace)
-
+inject(available_cards_target_file, available_cards_target_function, available_cards_target, available_cards_replace)
+inject(get_available_cards_target_file, get_available_cards_target_function, get_available_cards_target, get_available_cards_replace)
 end
 s_exile.on_disable = function()
     centerHook.removeSpectral(self, spectral_id)
@@ -167,7 +197,7 @@ s_exile.on_key_pressed = function(key)
         }))
   end
   if (key == 'u') then
-    sendDebugMessage(#getAllHighlightedCards(nil))
+    sendDebugMessage(G.GAME.current_playing_cards)
     end
 end
 
