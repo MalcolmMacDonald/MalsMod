@@ -2,7 +2,7 @@
 
 # Mal's Mod
 
-![Counting Joker](https://raw.githubusercontent.com/MalcolmMacDonald/MalsMod/main/balamod/assets/2x/Counting.png)
+![Counting Joker](https://raw.githubusercontent.com/MalcolmMacDonald/MalsMod/dev/balamod/assets/2x/Countdown.png)
 
 This mod adds the Counting Joker.
 
